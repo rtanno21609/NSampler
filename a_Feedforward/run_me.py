@@ -20,8 +20,8 @@ parser.add_argument('--not_save', action='store_true', help='invoke if you do no
 parser.add_argument('--disp', action='store_true', help='save the displayed outputs?')
 
 # Directories:
-parser.add_argument('--base_dir', type=str, default='/SAN/vision/hcp/Ryu/miccai2017', help='base directory')
-parser.add_argument('--gt_dir', type=str, default='/SAN/vision/hcp/DCA_HCP.2013.3_Proc', help='ground truth directory')
+parser.add_argument('--base_dir', type=str, default='/WHERE/TO/SAVE/RESULTS', help='base directory')
+parser.add_argument('--gt_dir', type=str, default='/WHERE/TRAINDATA/IS', help='ground truth directory')
 parser.add_argument('--subpath', type=str, default='T1w/Diffusion', help='subdirectory in gt_dir')
 parser.add_argument('--mask_dir', type=str, default='/SAN/vision/hcp/Ryu/miccai2017/hcp_masks', help='directory of segmentation masks')
 parser.add_argument('--mask_subpath', type=str, default='', help='subdirectory in mask_dir')
@@ -68,6 +68,10 @@ print device_lib.list_local_devices()
 
 # data/task:
 opt['train_size'] = int(opt['no_patches']*opt['no_subjects'])
+
+# TODO (Kang): normally use the function fetch_subjects below:
+# subjects_list = fetch_subjects(no_subjects=8, shuffle=False, test=True)
+subjects_list = ['117324']   # FIX: a single subject for a test run for KANG
 opt['train_subjects'] = fetch_subjects(no_subjects=opt['no_subjects'], shuffle=False, test=False)
 opt['patchlib_idx'] = 1
 
@@ -123,7 +127,9 @@ train.train_cnn(opt)
 
 
 # RECONSTRUCT
-subjects_list = fetch_subjects(no_subjects=8, shuffle=False, test=True)
+# TODO (Kang): normally use the function fetch_subjects below:
+# subjects_list = fetch_subjects(no_subjects=8, shuffle=False, test=True)
+subjects_list = ['117324']
 for subject in subjects_list:
     opt['subject'] = subject
     reconstruct.sr_reconstruct(opt)
